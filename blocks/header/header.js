@@ -121,6 +121,22 @@ export default async function decorate(block) {
   nav.id = 'nav';
   while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
 
+  // Fix nav links that are missing /en/ prefix
+  nav.querySelectorAll('a[href]').forEach((a) => {
+    const url = new URL(a.href, window.location.origin);
+    if (url.origin === window.location.origin) {
+      const { pathname } = url;
+      const needsEnPrefix = ['/creditcards', '/accounts', '/loans', '/insurance', '/blog'];
+      if (needsEnPrefix.includes(pathname)) {
+        a.href = `/en${pathname}`;
+      } else if (!pathname.startsWith('/') || pathname === '/') {
+        // relative paths like "insurance" - resolve to /en/<path>
+        const fixed = `/en/${pathname.replace(/^\//, '')}`;
+        a.href = fixed;
+      }
+    }
+  });
+
   const classes = ['brand', 'sections', 'tools'];
   classes.forEach((c, i) => {
     const section = nav.children[i];
