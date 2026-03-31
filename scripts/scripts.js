@@ -86,6 +86,32 @@ async function loadFonts() {
 }
 
 /**
+ * Fixes internal links that are missing the /en/ locale prefix.
+ * AEM content authored without the prefix gets corrected here globally.
+ * @param {Element} root The container element to scan
+ */
+export function fixInternalLinks(root) {
+  const LOCALE = '/en';
+  // Paths that live under /en/ but may be authored without the prefix
+  const KNOWN_PAGES = new Set([
+    '/creditcards', '/accounts', '/loans', '/insurance',
+    '/blog', '/nav', '/footer',
+  ]);
+  root.querySelectorAll('a[href]').forEach((a) => {
+    try {
+      const url = new URL(a.href, window.location.origin);
+      if (url.origin !== window.location.origin) return; // skip external links
+      let { pathname } = url;
+      // Fix relative paths like "accounts" → "/en/accounts"
+      if (!pathname.startsWith('/')) pathname = `/${pathname}`;
+      if (KNOWN_PAGES.has(pathname)) {
+        a.href = `${LOCALE}${pathname}${url.search}${url.hash}`;
+      }
+    } catch (e) { /* ignore invalid hrefs */ }
+  });
+}
+
+/**
  * Builds all synthetic blocks in a container element.
  * @param {Element} main The container element
  */
@@ -109,6 +135,7 @@ export function decorateMain(main) {
   buildAutoBlocks(main);
   decorateSections(main);
   decorateBlocks(main);
+  fixInternalLinks(main);
 }
 
 /**
