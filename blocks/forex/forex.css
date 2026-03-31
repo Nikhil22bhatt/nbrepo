@@ -1,0 +1,59 @@
+main .forex-container > div {
+  max-width: 1280px;
+}
+
+main .forex-container {
+  padding: 0;
+  box-sizing: border-box;
+}
+
+main .forex {
+  position: relative;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+@media (width >= 1280px) {
+  main .forex {
+    padding: 40px 0;
+  }
+}
+
+.forex .forex-heading {
+  font-size: var(--heading-font-size-m);
+  margin-bottom: 24px;
+}
+
+.forex table {
+  padding: 0;
+  box-sizing: border-box;
+  table-layout: auto;
+  width: 100%;
+  margin: auto;
+  border-collapse: collapse;
+}
+
+@media (width >= 600px) {
+  .forex table {
+    width: 50%;
+  }
+}
+
+.forex table tr {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.forex table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.forex table td {
+  padding: 8px 12px;
+  font-size: var(--body-font-size-xs);
+}
+
+.forex table img {
+  width: 50px;
+  height: auto;
+  display: block;
+}
